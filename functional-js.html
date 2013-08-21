@@ -1,0 +1,148 @@
+<html>
+<head>
+<script type="text/javascript">
+	var total;
+	var x = 0;
+	
+	// A simple function
+	function add(a, b) { return a + b; }
+	
+	// Higher-order functions
+	function makeAdder(base) {
+		return function(num) {
+			return base + num;
+		};
+	}
+	
+	var add2 = makeAdder(2);
+	total = add2(3);
+	total = add2(7);
+	
+	var add3 = partial(add, 2);
+	total = add3(5);
+	
+	// Step away from the for-loop
+	var arr = ['alpha', 'beta', 'gamma', 'delta'];
+	for (var i=0; i<arr.length; i++) {
+		console.log(arr[i]);
+	}
+	
+	arr.forEach(function(item) {
+		console.log("Foreach'ed " + item);
+	});
+	
+	// in jQuery
+	// $(arr).each(function (i, item)) { console.log(item); });
+	
+	// Mapping items.  Instead of...
+	var names = [];
+	for (var i=0; i<arr.length; i++) {
+		names.push(arr[i]);
+	}
+	
+	// We have...
+	var _names = arr.map(function (item) {
+		return "Mapped " +item;
+	});
+	
+	// Or we can have a one-liner
+	var __names = arr.map(function(t) { return "Oneliner "+t; });
+	
+	var str = arr.map(function(t) { return "Oneliner "+t; }).join(", ");
+	
+	// one day maybe:
+	// var str = arr.map(t => "Lambda "+t).join(", ");
+	// But not yet
+	var cylon = [{name: 'Calpha'},{name:'betaC'}];
+	// Extract a property
+	function prop(name) {
+		return function(object) {
+			return object[name];
+		};
+	}
+	
+	str = cylon.map(prop("name")).join(", ");
+	x=1;
+	
+	// Map, reduce
+	var totalChunkedLength = 0;
+	var buffers = [[1,2,3,4],[11,12,13,14],[21,22,23,24],[31,32,33,34],[41,42,43,44],[51,52,53,54]];
+	for (var i = 0; i < buffers.length; i++) {
+		totalChunkedLength += buffers[i].length;
+	}
+	x = totalChunkedLength;
+	
+	// Can be done using reduce
+	totalChunkedLength = buffers.map(function(chunk) { return chunk.length; })
+									 .reduce(function(prev, curr) { return prev + curr; });
+	x = totalChunkedLength;
+	
+	// and then we can use the add function
+	totalChunkedLength = buffers.map(function(chunk) { return chunk.length; }).reduce(add);
+	x = totalChunkedLength;
+	
+	// further...
+	totalChunkedLength = buffers.map(prop("length")).reduce(add);
+	x = totalChunkedLength;
+	
+	// But - we can go a different route
+	function sum(numbers) {	return numbers.reduce(add);	}
+	totalChunkedLength = sum(buffers.map(prop("length")));
+	x = totalChunkedLength;
+	
+	
+	var buttonArray = [['A5843','A5844','B3173','Z9999'],['A2279','A2280', 'A4451','Z9999'],['B0929','B0991','B1097','B3483']];
+					   
+	function createButtons(arr) {
+		return arr.map(function(s) { return '<li><button data-part='+s+'>'+s+'</button></li>'; });
+	}
+	var floom = createButtons(buttonArray[0]);
+	var xylophone = 'X' + buttonArray[0].map(function(s) { return '<li><button data-part='+s+'>'+s+'</button></li>'; });
+	
+	var MyToolbox = function (query) {
+		 var el = document.querySelectorAll(query), i;
+		 for (i = 0; i < el.length; i++) { this[i] = el[i]; }
+		 this.length = i;
+	};
+	 
+	var $ = function (query) { return new MyToolbox(query);	};
+	 
+	$.fn = MyToolbox.prototype = [];
+	 
+	$.fn.show = function () {
+		this.each(function () { this[0].style.display = "block"; });
+		return this;
+	};
+	 
+	$.fn.hide = function () {
+		this.each(function () { this[0].style.display = "none"; });
+		return this;
+	};
+	 
+	$.fn.each = function (callback) {
+		 for (var i = 0; i < this.length; i++) {
+			  var element = new MyToolbox;
+			  element[0] = this[i];
+			  element.length = 1;
+			  callback.call(element, i, element);
+		 }	 
+		 return this;
+	};
+
+	function doTheHustle() {
+		var testQuery = $("#btn");
+		testQuery = $("#content").hide();
+		$("content").hide();
+		alert(testQuery.length);
+	}
+</script>
+</head>
+<body onload="doTheHustle()">
+	<div style="position: absolute; top: 0px; left: 0px; display: block; z-index: 129; opacity: 1; background-color: rgb(0, 0, 0); color: rgb(255, 255, 255); box-shadow: none; width: 1024px; height: 768px; background-position: initial initial; background-repeat: initial initial; margin-left: auto; margin-right: auto;"><div class="content bg-#000 fg-#fff" ref="about/1-intro/1" style="margin-top: 344px;">
+		<h1>Pure, functional JavaScript</h1>
+		<button id="btn">Higher-order function button</button>
+		<div id="content"><h1>Content goes here</h1></div>
+	</div>
+</div>
+</body>
+</html>
